@@ -51,31 +51,31 @@ export default {
     this.initChart2();
     this.initChart3();
   },
- computed: {
+  computed: {
     ...mapGetters({
-      response: 'getResponse',
+      response: "getResponse",
     }),
   },
   methods: {
     initChart1() {
       var chart1 = echarts.init(document.getElementById("health"));
       const timestamps = this.response.details.system_health_analysis.map(
-        (item) => new Date(item.timestamp).toLocaleTimeString(),
+        (item) => new Date(item.timestamp).toLocaleTimeString()
       );
       const cpuUsage = this.response.details.system_health_analysis.map(
-        (item) => item.cpu_usage.current,
+        (item) => item.cpu_usage.current
       );
       const memoryUsage = this.response.details.system_health_analysis.map(
-        (item) => item.memory_usage.current,
+        (item) => item.memory_usage.current
       );
       const diskUsage = this.response.details.system_health_analysis.map(
-        (item) => item.disk_usage.current,
+        (item) => item.disk_usage.current
       );
       const networkIn = this.response.details.system_health_analysis.map(
-        (item) => item.network_bandwidth_usage.current_in,
+        (item) => item.network_bandwidth_usage.current_in
       );
       const networkOut = this.response.details.system_health_analysis.map(
-        (item) => item.network_bandwidth_usage.current_out,
+        (item) => item.network_bandwidth_usage.current_out
       );
 
       const health_option = {
@@ -136,8 +136,8 @@ export default {
       const eventTypes = [
         ...new Set(
           this.response.details.system_logs_analysis.map(
-            (item) => item.event_type,
-          ),
+            (item) => item.event_type
+          )
         ),
       ];
       const severityMap = { low: 1, medium: 2, high: 3 };
@@ -150,7 +150,7 @@ export default {
           eventType: item.event_type,
           description: item.description,
           service: item.service,
-        }),
+        })
       );
 
       const option = {
@@ -190,7 +190,7 @@ export default {
           axisLabel: {
             formatter: function (value) {
               return Object.keys(severityMap).find(
-                (key) => severityMap[key] === value,
+                (key) => severityMap[key] === value
               );
             },
           },
@@ -219,7 +219,7 @@ export default {
           timestamp: new Date(item.timestamp).getTime(),
           severity: severityMap[item.severity],
           attack_type: item.attack_type,
-        }),
+        })
       );
 
       let _this = this;
@@ -263,7 +263,7 @@ export default {
           axisLabel: {
             formatter: function (value) {
               return Object.keys(severityMap).find(
-                (key) => severityMap[key] === value,
+                (key) => severityMap[key] === value
               );
             },
           },

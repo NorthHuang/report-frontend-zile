@@ -81,8 +81,7 @@ const responseModule = {
               current_out: 500,
               threshold: 1000,
               status: "normal",
-              description:
-                "Network bandwidth usage within acceptable limits.",
+              description: "Network bandwidth usage within acceptable limits.",
             },
           },
           {
