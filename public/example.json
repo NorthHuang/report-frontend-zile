@@ -1,0 +1,72 @@
+{
+    "network_traffic": [
+        {
+            "timestamp": "2024-08-26T12:00:00Z",
+            "source_ip": "192.168.1.2",
+            "destination_ip": "192.168.1.3",
+            "source_port": 443,
+            "destination_port": 52345,
+            "protocol": "TCP",
+            "length": 1500
+        },
+        {
+            "timestamp": "2024-08-26T12:00:05Z",
+            "source_ip": "192.168.1.4",
+            "destination_ip": "192.168.1.5",
+            "source_port": 80,
+            "destination_port": 50443,
+            "protocol": "UDP",
+            "length": 1200
+        }
+    ],
+    "system_logs": [
+        {
+            "timestamp": "2024-08-26T12:00:00Z",
+            "hostname": "server1",
+            "service": "sshd",
+            "pid": 12345,
+            "loglevel": "INFO",
+            "message": "Accepted password for user1 from 192.168.1.100 port 52345 ssh2"
+        },
+        {
+            "timestamp": "2024-08-26T12:05:00Z",
+            "hostname": "server1",
+            "service": "nginx",
+            "pid": 54321,
+            "loglevel": "ERROR",
+            "message": "Failed to start Nginx service due to missing configuration file."
+        }
+    ],
+    "system_health": [
+        {
+            "timestamp": "2024-08-26T12:00:00Z",
+            "cpu_usage": 65.7,
+            "memory_usage": 72.3,
+            "disk_io": 150,
+            "network_bandwidth": 1000,
+            "uptime": 86400,
+            "process_count": 187,
+            "temperature": 55.3,
+            "disk_usage": 88.7,
+            "swap_usage": 40.2,
+            "network_traffic_in": 650,
+            "network_traffic_out": 450,
+            "network_errors": 2
+        },
+        {
+            "timestamp": "2024-08-26T12:05:00Z",
+            "cpu_usage": 70.1,
+            "memory_usage": 75.0,
+            "disk_io": 200,
+            "network_bandwidth": 1200,
+            "uptime": 87000,
+            "process_count": 190,
+            "temperature": 58.1,
+            "disk_usage": 90.5,
+            "swap_usage": 45.3,
+            "network_traffic_in": 800,
+            "network_traffic_out": 600,
+            "network_errors": 3
+        }
+    ]
+}
