@@ -146,10 +146,36 @@ const counterModule = {
     doubleCount: (state) => state.count * 2,
   },
 };
-
+const userModule = {
+  state: () => ({
+    username: null, // Initially, no user is logged in
+  }),
+  getters: {
+    getUsername: (state) => state.username, // Getter to access the username
+  },
+  mutations: {
+    setUsername(state, username) {
+      state.username = username; // Set the username when the user logs in
+    },
+    clearUsername(state) {
+      state.username = null; // Clear the username when the user logs out
+    },
+  },
+  actions: {
+    login({ commit }, username) {
+      // Simulate a login action, which sets the username
+      commit("setUsername", username);
+    },
+    logout({ commit }) {
+      // Simulate a logout action, which clears the username
+      commit("clearUsername");
+    },
+  },
+};
 export default createStore({
   modules: {
     counter: counterModule,
     response: responseModule,
+    user: userModule,
   },
 });

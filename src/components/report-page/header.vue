@@ -1,5 +1,11 @@
 <template>
   <div class="header">
+    <div class="user-info">
+      <span @click="toggleDropdown">{{ username }} ▼</span>
+      <div v-if="showDropdown" class="dropdown-menu">
+        <button @click="handleLogout">Logout</button>
+      </div>
+    </div>
     <Upload action="//jsonplaceholder.typicode.com/posts/">
       <Button size="large" icon="ios-cloud-upload-outline"
         >Upload And Analyse</Button
@@ -16,9 +22,28 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Header",
+  data() {
+    return {
+      showDropdown: false,
+    };
+  },
+  computed: {
+    ...mapGetters({
+      username: "getUsername", // get username from Vuex
+    }),
+  },
   methods: {
+    ...mapActions(["logout"]),
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown; 
+    },
+    handleLogout() {
+      this.logout(); 
+      this.$router.push("/"); 
+    },
     downloadJson() {
       const filePath = "/example.json";
 
@@ -43,5 +68,11 @@ export default {
   justify-content: space-around;
   align-items: center;
   border-radius: 2em;
+}
+.user-info {
+  position: absolute; 
+  top: 10px; 
+  left: 10px;
+  cursor: pointer;
 }
 </style>
