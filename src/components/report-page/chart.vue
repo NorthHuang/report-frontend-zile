@@ -59,22 +59,22 @@ export default {
   methods: {
     initChart1() {
       var chart1 = echarts.init(document.getElementById("health"));
-      const timestamps = this.response.details.system_health_analysis.map(
+      const timestamps = this.response.details.network_traffic_analysis.map(
         (item) => new Date(item.timestamp).toLocaleTimeString()
       );
-      const cpuUsage = this.response.details.system_health_analysis.map(
+      const cpuUsage = this.response.details.network_traffic_analysis.map(
         (item) => item.cpu_usage.current
       );
-      const memoryUsage = this.response.details.system_health_analysis.map(
+      const memoryUsage = this.response.details.network_traffic_analysis.map(
         (item) => item.memory_usage.current
       );
-      const diskUsage = this.response.details.system_health_analysis.map(
+      const diskUsage = this.response.details.network_traffic_analysis.map(
         (item) => item.disk_usage.current
       );
-      const networkIn = this.response.details.system_health_analysis.map(
+      const networkIn = this.response.details.network_traffic_analysis.map(
         (item) => item.network_bandwidth_usage.current_in
       );
-      const networkOut = this.response.details.system_health_analysis.map(
+      const networkOut = this.response.details.network_traffic_analysis.map(
         (item) => item.network_bandwidth_usage.current_out
       );
 
@@ -214,7 +214,7 @@ export default {
       var chart3 = echarts.init(document.getElementById("traffic"));
       const severityMap = { low: 1, medium: 2, high: 3 };
 
-      const barData = this.response.details.network_traffic_analysis.map(
+      const barData = this.response.details.system_health_analysis.map(
         (item) => ({
           timestamp: new Date(item.timestamp).getTime(),
           severity: severityMap[item.severity],

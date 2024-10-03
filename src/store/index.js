@@ -11,7 +11,7 @@ const responseModule = {
         system_health_status: "warning",
       },
       details: {
-        network_traffic_analysis: [
+        system_health_analysis: [
           {
             attack_type: "DDoS",
             source_ip: "192.168.1.4",
@@ -53,7 +53,7 @@ const responseModule = {
               "Nginx service failed to start due to missing configuration file.",
           },
         ],
-        system_health_analysis: [
+        network_traffic_analysis: [
           {
             timestamp: "2024-08-26T12:00:00Z",
             cpu_usage: {
