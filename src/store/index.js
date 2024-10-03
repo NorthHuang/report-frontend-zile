@@ -1,5 +1,21 @@
 import { createStore } from "vuex";
 
+const defaultResponse = {
+  status: "no-report",
+  analysis_time: "",
+  summary: {
+    total_attacks_detected: 0,
+    critical_warnings: 0,
+    system_health_status: "normal",
+  },
+  details: {
+    system_health_analysis: [],
+    system_logs_analysis: [],
+    network_traffic_analysis: [],
+  },
+  recommendations: ["No recommendations available."],
+};
+
 const responseModule = {
   state: () => ({
     response: {
@@ -117,17 +133,30 @@ const responseModule = {
         ]
       },
       recommendations: [
-        "Investigate the source of the DDoS attack and consider blocking the IP address 192.168.1.4.",
-        "Monitor CPU usage closely and offload tasks to reduce load.",
-        "Increase disk space or clean up unnecessary files to avoid disk exhaustion.",
+        "Useless.",
       ],
     },
   }),
   getters: {
     getResponse: (state) => state.response,
   },
+  mutations: {
+    setResponse(state, newResponse) {
+      state.response = newResponse; // 更新 Vuex 中的 response
+    },
+    clearResponse(state) {
+      state.response = defaultResponse; // 清空当前 response
+    },
+  },
+  actions: {
+    changeCurrentReport({ commit }, report) {
+      commit("setResponse", report); // 将选中的报告替换为当前显示的报告
+    },
+    clearResponse({ commit }) {
+      commit("clearResponse"); // 清空 response
+    },
+  },
 };
-
 const counterModule = {
   state: () => ({
     count: 0,
@@ -162,13 +191,52 @@ const userModule = {
     },
   },
   actions: {
-    login({ commit }, username) {
+    login({ commit ,dispatch}, username) {
       // Simulate a login action, which sets the username
       commit("setUsername", username);
+      dispatch("clearReports");// Clear reports when user logs in
+      dispatch("clearResponse");
     },
-    logout({ commit }) {
+    logout({ commit,dispatch }) {
       // Simulate a logout action, which clears the username
       commit("clearUsername");
+      dispatch("clearReports"); // Clear reports when user logs out
+      dispatch("clearResponse");
+    },
+  },
+};
+
+const reportsModule = {
+  state: () => ({
+    reports: [], // report list
+    currentReport: null,
+  }),
+  getters: {
+    getReports: (state) => state.reports, // get reports
+    getCurrentReport: (state) => state.currentReport,
+  },
+  mutations: {
+    setReports(state, reports) {
+      state.reports = reports; // save report to Vuex
+      state.currentReport = null; // 如果没有报告，重置当前报告
+    },
+     clearReports(state) {
+      state.reports = []; // clear reports when user logs out or switches user
+      state.currentReport = null;
+    },
+    setCurrentReport(state, report) {
+      state.currentReport = report; //change to current report
+    },
+  },
+  actions: {
+    setReports({ commit ,dispatch}, reports) {
+      commit("setReports", reports); // submit report to mutation
+      if (reports.length > 0) {
+        dispatch("changeCurrentReport", reports[0]); // 自动设置第一个报告为当前报告
+      }
+    },
+    clearReports({ commit }) {
+      commit("clearReports"); // clear reports mutation
     },
   },
 };
@@ -177,5 +245,6 @@ export default createStore({
     counter: counterModule,
     response: responseModule,
     user: userModule,
+    reports: reportsModule,
   },
 });

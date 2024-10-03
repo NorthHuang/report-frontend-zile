@@ -46,10 +46,24 @@ import * as echarts from "echarts";
 import { mapGetters } from "vuex";
 export default {
   name: "Chart",
+  data(){
+    return {
+      chart1: null,  //chart instance
+      chart2: null,
+      chart3: null,
+    };
+  },
   mounted() {
-    this.initChart1();
-    this.initChart2();
-    this.initChart3();
+    if(this.response && this.response && this.response.details){
+      this.renderCharts();
+    }
+  },
+  watch:{
+    response(newVal) {
+      if (newVal && newVal.details) {
+        this.renderCharts();
+      }
+    },
   },
   computed: {
     ...mapGetters({
@@ -57,8 +71,16 @@ export default {
     }),
   },
   methods: {
+    renderCharts() {
+      this.initChart1();
+      this.initChart2();
+      this.initChart3();
+    },
     initChart1() {
-      var chart1 = echarts.init(document.getElementById("health"));
+      if (this.chart1) {
+        this.chart1.dispose();
+      }
+      this.chart1 = echarts.init(document.getElementById("health"));
       const timestamps = this.response.details.system_health_analysis.map(
         (item) => new Date(item.timestamp).toLocaleTimeString()
       );
@@ -129,10 +151,13 @@ export default {
           },
         ],
       };
-      chart1.setOption(health_option);
+      this.chart1.setOption(health_option);
     },
     initChart2() {
-      var chart2 = echarts.init(document.getElementById("log"));
+      if (this.chart2) {
+        this.chart2.dispose();
+      }
+      this.chart2 = echarts.init(document.getElementById("log"));
       const eventTypes = [
         ...new Set(
           this.response.details.system_logs_analysis.map(
@@ -208,10 +233,13 @@ export default {
           },
         ],
       };
-      chart2.setOption(option);
+      this.chart2.setOption(option);
     },
     initChart3() {
-      var chart3 = echarts.init(document.getElementById("traffic"));
+      if (this.chart3) {
+        this.chart3.dispose();
+      }
+      this.chart3 = echarts.init(document.getElementById("traffic"));
       const severityMap = { low: 1, medium: 2, high: 3 };
 
       const barData = this.response.details.network_traffic_analysis.map(
@@ -280,7 +308,7 @@ export default {
           },
         ],
       };
-      chart3.setOption(option);
+      this.chart3.setOption(option);
     },
   },
 };

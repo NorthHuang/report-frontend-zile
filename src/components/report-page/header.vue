@@ -6,10 +6,13 @@
         <button @click="handleLogout">Logout</button>
       </div>
     </div>
-    <Upload action="//jsonplaceholder.typicode.com/posts/">
-      <Button size="large" icon="ios-cloud-upload-outline"
+    <!-- <Upload action="//jsonplaceholder.typicode.com/posts/">
+      <Button size="large" icon="ios-cloud-upload-outline" @click="uploadFile"
         >Upload And Analyse</Button
       >
+    </Upload> -->
+    <Upload :before-upload="handleFileUpload" :show-upload-list="false">
+      <Button size="large" icon="ios-cloud-upload-outline">Upload And Analyse</Button>
     </Upload>
     <Button
       size="large"
@@ -23,11 +26,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import axios from "axios";
 export default {
   name: "Header",
   data() {
     return {
       showDropdown: false,
+      selectedFile: null,//store the uploaded file
     };
   },
   computed: {
@@ -46,14 +51,44 @@ export default {
     },
     downloadJson() {
       const filePath = "/example.json";
-
       const link = document.createElement("a");
       link.href = filePath;
-
       link.download = "data.json";
-
       link.click();
     },
+    handleFileUpload(file){
+      this.selectedFile = file; // Capture the uploaded file
+      this.uploadFile();
+      return false; // Prevent automatic upload, will handle manually
+    },
+    async uploadFile(){
+      if(!this.selectedFile){
+        alert("Please select a file first!");
+        return;
+      }
+      try{
+          //create a form data object
+          let formData = new FormData();
+          formData.append("file", this.selectedFile);
+          //add jwt token 
+          const token =localStorage.getItem("jwt");
+          //send it to back end
+          const response=await axios.post("http://localhost:5000/analysis", formData,{
+            headers: {
+            "Content-Type": "multipart/form-data",
+            "x-access-token": token, // Send JWT token
+          },
+          });
+          if(response.data.status==="ok"){
+            alert("File uploaded and analyzed successfully!");
+          }else{
+            alert("Error during analysis: " + response.data.error);
+          }
+      } catch (error){
+        console.error("Error during file upload:", error);
+        alert("Error during file upload and analysis.");
+      }
+    } 
   },
 };
 </script>
