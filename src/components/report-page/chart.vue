@@ -161,12 +161,12 @@ export default {
           trigger: "item",
           formatter: function (params) {
             return `
-              Event: ${params.data.eventType}<br/>
-              Service: ${params.data.service}<br/>
-              Severity: ${Object.keys(severityMap).find((key) => severityMap[key] === params.value[1])}<br/>
-              Time: ${new Date(params.value[0]).toLocaleString()}<br/>
-              Description: ${params.data.description}
-            `;
+                Event: ${params.data.eventType}<br/>
+                Service: ${params.data.service}<br/>
+                Severity: ${Object.keys(severityMap).find((key) => severityMap[key] === params.value[1])}<br/>
+                Time: ${new Date(params.value[0]).toLocaleString()}<br/>
+                Description: ${params.data.description}
+              `;
           },
         },
         legend: {
@@ -238,11 +238,11 @@ export default {
             const attack =
               _this.response.details.network_traffic_analysis[dataIndex];
             return `
-              Attack Type: ${attack.attack_type}<br/>
-              Severity: ${attack.severity}<br/>
-              Time: ${new Date(attack.timestamp).toLocaleString()}<br/>
-              Description: ${attack.description}
-            `;
+                Attack Type: ${attack.attack_type}<br/>
+                Severity: ${attack.severity}<br/>
+                Time: ${new Date(attack.timestamp).toLocaleString()}<br/>
+                Description: ${attack.description}
+              `;
           },
         },
         xAxis: {
