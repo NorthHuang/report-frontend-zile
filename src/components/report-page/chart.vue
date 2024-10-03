@@ -59,22 +59,22 @@ export default {
   methods: {
     initChart1() {
       var chart1 = echarts.init(document.getElementById("health"));
-      const timestamps = this.response.details.network_traffic_analysis.map(
+      const timestamps = this.response.details.system_health_analysis.map(
         (item) => new Date(item.timestamp).toLocaleTimeString()
       );
-      const cpuUsage = this.response.details.network_traffic_analysis.map(
+      const cpuUsage = this.response.details.system_health_analysis.map(
         (item) => item.cpu_usage.current
       );
-      const memoryUsage = this.response.details.network_traffic_analysis.map(
+      const memoryUsage = this.response.details.system_health_analysis.map(
         (item) => item.memory_usage.current
       );
-      const diskUsage = this.response.details.network_traffic_analysis.map(
+      const diskUsage = this.response.details.system_health_analysis.map(
         (item) => item.disk_usage.current
       );
-      const networkIn = this.response.details.network_traffic_analysis.map(
+      const networkIn = this.response.details.system_health_analysis.map(
         (item) => item.network_bandwidth_usage.current_in
       );
-      const networkOut = this.response.details.network_traffic_analysis.map(
+      const networkOut = this.response.details.system_health_analysis.map(
         (item) => item.network_bandwidth_usage.current_out
       );
 
@@ -161,12 +161,12 @@ export default {
           trigger: "item",
           formatter: function (params) {
             return `
-              Event: ${params.data.eventType}<br/>
-              Service: ${params.data.service}<br/>
-              Severity: ${Object.keys(severityMap).find((key) => severityMap[key] === params.value[1])}<br/>
-              Time: ${new Date(params.value[0]).toLocaleString()}<br/>
-              Description: ${params.data.description}
-            `;
+                Event: ${params.data.eventType}<br/>
+                Service: ${params.data.service}<br/>
+                Severity: ${Object.keys(severityMap).find((key) => severityMap[key] === params.value[1])}<br/>
+                Time: ${new Date(params.value[0]).toLocaleString()}<br/>
+                Description: ${params.data.description}
+              `;
           },
         },
         legend: {
@@ -214,7 +214,7 @@ export default {
       var chart3 = echarts.init(document.getElementById("traffic"));
       const severityMap = { low: 1, medium: 2, high: 3 };
 
-      const barData = this.response.details.system_health_analysis.map(
+      const barData = this.response.details.network_traffic_analysis.map(
         (item) => ({
           timestamp: new Date(item.timestamp).getTime(),
           severity: severityMap[item.severity],
@@ -238,11 +238,11 @@ export default {
             const attack =
               _this.response.details.network_traffic_analysis[dataIndex];
             return `
-              Attack Type: ${attack.attack_type}<br/>
-              Severity: ${attack.severity}<br/>
-              Time: ${new Date(attack.timestamp).toLocaleString()}<br/>
-              Description: ${attack.description}
-            `;
+                Attack Type: ${attack.attack_type}<br/>
+                Severity: ${attack.severity}<br/>
+                Time: ${new Date(attack.timestamp).toLocaleString()}<br/>
+                Description: ${attack.description}
+              `;
           },
         },
         xAxis: {
