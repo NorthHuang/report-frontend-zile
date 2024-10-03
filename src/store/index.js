@@ -29,48 +29,6 @@ const responseModule = {
       details: {
         system_health_analysis: [
           {
-            attack_type: "DDoS",
-            source_ip: "192.168.1.4",
-            target_ip: "192.168.1.5",
-            timestamp: "2024-08-26T12:00:05Z",
-            severity: "high",
-            description:
-              "Detected Distributed Denial of Service attack targeting port 80.",
-          },
-          {
-            attack_type: "Port Scan",
-            source_ip: "192.168.1.6",
-            target_ip: "192.168.1.7",
-            timestamp: "2024-08-26T12:02:00Z",
-            severity: "medium",
-            description:
-              "Multiple ports scanned from a single IP address, indicating possible reconnaissance.",
-          },
-        ],
-        system_logs_analysis: [
-          {
-            event_type: "Failed Login",
-            hostname: "server1",
-            service: "sshd",
-            timestamp: "2024-08-26T12:00:00Z",
-            user: "user1",
-            source_ip: "192.168.1.100",
-            severity: "low",
-            description:
-              "Repeated failed login attempts detected, may indicate brute force attack.",
-          },
-          {
-            event_type: "Service Error",
-            hostname: "server1",
-            service: "nginx",
-            timestamp: "2024-08-26T12:07:00Z",
-            severity: "medium",
-            description:
-              "Nginx service failed to start due to missing configuration file.",
-          },
-        ],
-        network_traffic_analysis: [
-          {
             timestamp: "2024-08-26T12:00:00Z",
             cpu_usage: {
               current: 85.2,
@@ -131,6 +89,48 @@ const responseModule = {
             },
           },
         ],
+        system_logs_analysis: [
+          {
+            event_type: "Failed Login",
+            hostname: "server1",
+            service: "sshd",
+            timestamp: "2024-08-26T12:00:00Z",
+            user: "user1",
+            source_ip: "192.168.1.100",
+            severity: "low",
+            description:
+              "Repeated failed login attempts detected, may indicate brute force attack.",
+          },
+          {
+            event_type: "Service Error",
+            hostname: "server1",
+            service: "nginx",
+            timestamp: "2024-08-26T12:07:00Z",
+            severity: "medium",
+            description:
+              "Nginx service failed to start due to missing configuration file.",
+          },
+        ],
+        network_traffic_analysis: [
+          {
+            attack_type: "DDoS",
+            source_ip: "192.168.1.4",
+            target_ip: "192.168.1.5",
+            timestamp: "2024-08-26T12:00:05Z",
+            severity: "high",
+            description:
+              "Detected Distributed Denial of Service attack targeting port 80.",
+          },
+          {
+            attack_type: "Port Scan",
+            source_ip: "192.168.1.6",
+            target_ip: "192.168.1.7",
+            timestamp: "2024-08-26T12:02:00Z",
+            severity: "medium",
+            description:
+              "Multiple ports scanned from a single IP address, indicating possible reconnaissance.",
+          },
+        ]
       },
       recommendations: [
         "Useless.",
