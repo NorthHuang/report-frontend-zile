@@ -22,7 +22,6 @@
 
 <script>
 import { mapActions } from "vuex";
-import axios from 'axios';
 
 export default {
   name: "Login",
@@ -37,7 +36,7 @@ export default {
     async handleLogin() {
       try {
         // Send login request to the backend
-        const response = await axios.post('http://localhost:5000/login', {
+        const response = await this.$axios.post('/login', {
           username: this.username,
           password: this.password,
         });
@@ -56,7 +55,7 @@ export default {
     async goToRegister() {
       try {
         // Send registration request to the backend
-        const response = await axios.post('http://localhost:5000/register', {
+        const response = await this.$axios.post('/register', {
           username: this.username,
           password: this.password,
         });

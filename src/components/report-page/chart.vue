@@ -1,6 +1,6 @@
 <template>
   <div id="chart">
-    <div
+    <!-- <div
       id="recommendation"
       class="children_chart"
       style="
@@ -13,29 +13,29 @@
         <h3 style="text-align: center">recommendations</h3>
         <div>{{ response.recommendations.join() }}</div>
       </div>
-    </div>
+    </div> -->
     <div
       class="children_chart"
       style="width: 90%; height: 50%; margin-bottom: 100px"
     >
       <div id="health" style="width: 100%; height: 100%"></div>
       <div class="title">
-        <Alert type="success">{{ Object.keys(response.details)[0] }}</Alert>
+        <Alert type="success">system health analysis</Alert>
       </div>
     </div>
     <div
       class="children_chart"
       style="width: 90%; height: 50%; margin-bottom: 100px"
     >
-      <div id="log" style="width: 100%; height: 100%"></div>
+      <div id="traffic" style="width: 100%; height: 100%"></div>
       <div class="title">
-        <Alert type="success">{{ Object.keys(response.details)[1] }}</Alert>
+        <Alert type="success">network traffic analysis</Alert>
       </div>
     </div>
     <div class="children_chart" style="width: 90%; height: 50%">
-      <div id="traffic" style="width: 100%; height: 100%"></div>
+      <div id="score" style="width: 100%; height: 100%"></div>
       <div class="title">
-        <Alert type="success">{{ Object.keys(response.details)[2] }}</Alert>
+        <Alert type="success">risk score analysis</Alert>
       </div>
     </div>
   </div>
@@ -44,6 +44,7 @@
 <script>
 import * as echarts from "echarts";
 import { mapGetters } from "vuex";
+import { markRaw } from 'vue'
 export default {
   name: "Chart",
   data(){
@@ -53,18 +54,17 @@ export default {
       chart3: null,
     };
   },
-  mounted() {
-    if(this.response && this.response && this.response.details){
-      this.renderCharts();
-    }
-  },
-  watch:{
-    response(newVal) {
+  mounted() {},
+  watch: {
+  response: {
+    handler(newVal) {
       if (newVal && newVal.details) {
         this.renderCharts();
       }
     },
+    deep: true,  // 启用深度监听
   },
+},
   computed: {
     ...mapGetters({
       response: "getResponse",
@@ -80,24 +80,18 @@ export default {
       if (this.chart1) {
         this.chart1.dispose();
       }
-      this.chart1 = echarts.init(document.getElementById("health"));
-      const timestamps = this.response.details.system_health_analysis.map(
+      this.chart1 = markRaw(echarts.init(document.getElementById("health")));
+      const timestamps = this.response.details.map(
         (item) => new Date(item.timestamp).toLocaleTimeString()
       );
-      const cpuUsage = this.response.details.system_health_analysis.map(
-        (item) => item.cpu_usage.current
+      const cpuUsage = this.response.details.map(
+        (item) => item.cpu_usage[0]
       );
-      const memoryUsage = this.response.details.system_health_analysis.map(
-        (item) => item.memory_usage.current
+      const memoryUsage = this.response.details.map(
+        (item) => item.memory_usage[0]
       );
-      const diskUsage = this.response.details.system_health_analysis.map(
-        (item) => item.disk_usage.current
-      );
-      const networkIn = this.response.details.system_health_analysis.map(
-        (item) => item.network_bandwidth_usage.current_in
-      );
-      const networkOut = this.response.details.system_health_analysis.map(
-        (item) => item.network_bandwidth_usage.current_out
+      const diskUsage = this.response.details.map(
+        (item) => item.disk_usage[0]
       );
 
       const health_option = {
@@ -112,8 +106,6 @@ export default {
             "CPU Usage",
             "Memory Usage",
             "Disk Usage",
-            "Network In",
-            "Network Out",
           ],
         },
         xAxis: {
@@ -138,7 +130,47 @@ export default {
             name: "Disk Usage",
             type: "line",
             data: diskUsage,
-          },
+          }
+        ],
+      };
+      this.chart1.setOption(health_option);
+    },
+    initChart2() {
+      if (this.chart2) {
+        this.chart2.dispose();
+      }
+      this.chart2 = markRaw(echarts.init(document.getElementById("traffic")));
+      const timestamps = this.response.details.map(
+        (item) => new Date(item.timestamp).toLocaleTimeString()
+      );
+      const networkIn = this.response.details.map(
+        (item) => item.network_traffic_in[0]
+      );
+      const networkOut = this.response.details.map(
+        (item) => item.network_traffic_out[0]
+      );
+
+      const traffic_option = {
+        title: {
+          text: "",
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          data: [
+            "Network In",
+            "Network Out",
+          ],
+        },
+        xAxis: {
+          type: "category",
+          data: timestamps,
+        },
+        yAxis: {
+          type: "value",
+        },
+        series: [
           {
             name: "Network In",
             type: "line",
@@ -151,164 +183,48 @@ export default {
           },
         ],
       };
-      this.chart1.setOption(health_option);
-    },
-    initChart2() {
-      if (this.chart2) {
-        this.chart2.dispose();
-      }
-      this.chart2 = echarts.init(document.getElementById("log"));
-      const eventTypes = [
-        ...new Set(
-          this.response.details.system_logs_analysis.map(
-            (item) => item.event_type
-          )
-        ),
-      ];
-      const severityMap = { low: 1, medium: 2, high: 3 };
-      const scatterData = this.response.details.system_logs_analysis.map(
-        (item) => ({
-          value: [
-            new Date(item.timestamp).getTime(),
-            severityMap[item.severity],
-          ],
-          eventType: item.event_type,
-          description: item.description,
-          service: item.service,
-        })
-      );
-
-      const option = {
-        title: {
-          text: "",
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: function (params) {
-            return `
-                Event: ${params.data.eventType}<br/>
-                Service: ${params.data.service}<br/>
-                Severity: ${Object.keys(severityMap).find((key) => severityMap[key] === params.value[1])}<br/>
-                Time: ${new Date(params.value[0]).toLocaleString()}<br/>
-                Description: ${params.data.description}
-              `;
-          },
-        },
-        legend: {
-          data: eventTypes,
-        },
-        xAxis: {
-          type: "time",
-          name: "Timestamp",
-          axisLabel: {
-            formatter: function (value) {
-              return new Date(value).toLocaleTimeString();
-            },
-          },
-        },
-        yAxis: {
-          type: "value",
-          name: "Severity",
-          min: 0,
-          max: 3,
-          interval: 1,
-          axisLabel: {
-            formatter: function (value) {
-              return Object.keys(severityMap).find(
-                (key) => severityMap[key] === value
-              );
-            },
-          },
-        },
-        series: [
-          {
-            name: "System Logs",
-            type: "scatter",
-            data: scatterData,
-            symbolSize: 10,
-            encode: {
-              x: "value[0]",
-              y: "value[1]",
-            },
-          },
-        ],
-      };
-      this.chart2.setOption(option);
+      this.chart2.setOption(traffic_option);
     },
     initChart3() {
       if (this.chart3) {
         this.chart3.dispose();
       }
-      this.chart3 = echarts.init(document.getElementById("traffic"));
-      const severityMap = { low: 1, medium: 2, high: 3 };
-
-      const barData = this.response.details.network_traffic_analysis.map(
-        (item) => ({
-          timestamp: new Date(item.timestamp).getTime(),
-          severity: severityMap[item.severity],
-          attack_type: item.attack_type,
-        })
+      this.chart3 = markRaw(echarts.init(document.getElementById("score")));
+      const timestamps = this.response.details.map(
+        (item) => new Date(item.timestamp).toLocaleTimeString()
+      );
+      const risk_score = this.response.details.map(
+        (item) => item.risk_score
       );
 
-      let _this = this;
-
-      const option = {
+      const risk_score_option = {
         title: {
           text: "",
         },
         tooltip: {
           trigger: "axis",
-          axisPointer: {
-            type: "shadow",
-          },
-          formatter: function (params) {
-            const dataIndex = params[0].dataIndex;
-            const attack =
-              _this.response.details.network_traffic_analysis[dataIndex];
-            return `
-                Attack Type: ${attack.attack_type}<br/>
-                Severity: ${attack.severity}<br/>
-                Time: ${new Date(attack.timestamp).toLocaleString()}<br/>
-                Description: ${attack.description}
-              `;
-          },
+        },
+        legend: {
+          data: [
+            "Risk Score"
+          ],
         },
         xAxis: {
-          type: "time",
-          name: "Timestamp",
-          axisLabel: {
-            formatter: function (value) {
-              return new Date(value).toLocaleTimeString();
-            },
-          },
+          type: "category",
+          data: timestamps,
         },
         yAxis: {
           type: "value",
-          name: "Severity",
-          min: 0,
-          max: 3,
-          interval: 1,
-          axisLabel: {
-            formatter: function (value) {
-              return Object.keys(severityMap).find(
-                (key) => severityMap[key] === value
-              );
-            },
-          },
         },
         series: [
           {
-            name: "Severity",
-            type: "bar",
-            data: barData.map((item) => [item.timestamp, item.severity]),
-            encode: {
-              x: "timestamp",
-              y: "severity",
-            },
-          },
+            name: "Risk Score",
+            type: "line",
+            data: risk_score,
+          }
         ],
       };
-      this.chart3.setOption(option);
+      this.chart3.setOption(risk_score_option);
     },
   },
 };

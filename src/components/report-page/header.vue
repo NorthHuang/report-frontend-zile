@@ -26,7 +26,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import axios from "axios";
 export default {
   name: "Header",
   data() {
@@ -74,7 +73,7 @@ export default {
           //add jwt token 
           const token =localStorage.getItem("jwt");
           //send it to back end
-          const response=await axios.post("http://localhost:5000/analysis", formData,{
+          const response=await this.$axios.post("/analysis", formData,{
             headers: {
             "Content-Type": "multipart/form-data",
             "x-access-token": token, // Send JWT token

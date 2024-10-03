@@ -1,14 +1,13 @@
 <template>
   <div class="switch">
     <p>Reports:</p>
-    <div v-for="(report, index) in reports" :key="index" class="report-item">
+    <div v-for="(report, index) in getReports" :key="index" class="report-item">
       <button @click="generateChart(report)">Report {{ index + 1 }}</button>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Switch",
@@ -16,9 +15,6 @@ export default {
     ...mapGetters({getReports:"getReports",
     isReportsUploaded: "isReportsUploaded",
     }), //get reports from Vuex
-    reports() {
-      return this.getReports; 
-    },
   },
   watch:{
     isReportsUploaded(newVal) {
@@ -29,29 +25,20 @@ export default {
     },
   },
   async created() {
-    if(this.getReports.length===0){
-      await this.fetchUserReports();//if there is no report in Vuex
-    }else{
-      this.reports=this.getReports;//
-    }
+    await this.fetchUserReports();//if there is no report in Vuex
   },
   methods:{
     ...mapActions(["setReports","changeCurrentReport","setIsReportsUploaded"]),
     async fetchUserReports() {
       try {
         const token = localStorage.getItem("jwt"); 
-        const response = await axios.get("http://localhost:5000/user-reports", {
+        const response = await this.$axios.get("/user-reports", {
           headers: {
             "x-access-token": token,
           },
         });
         if (response.data.status === "success") {
-            console.log(response.data.reports); // 打印报告列表
-            response.data.reports.forEach((report, index) => {
-            console.log(`Report ${index + 1}:`, report); // 打印每个报告的详细信息
-        });
-            if(response.data.reports&&response.data.reports.length>0){
-              this.reports = response.data.reports;
+            if(response.data.reports && response.data.reports.length > 0){
               this.setReports(response.data.reports)
             }
         } else {
