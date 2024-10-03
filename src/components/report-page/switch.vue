@@ -12,13 +12,23 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Switch",
   computed:{
-    ...mapGetters({getReports:"getReports"}), //get reports from Vuex
+    ...mapGetters({getReports:"getReports",
+    isReportsUploaded: "isReportsUploaded",
+    }), //get reports from Vuex
+  },
+  watch:{
+    isReportsUploaded(newVal) {
+      if (newVal) {
+        this.fetchUserReports(); // Fetch new reports when upload completes
+        this.setIsReportsUploaded(false); // Reset the flag
+      }
+    },
   },
   async created() {
     await this.fetchUserReports();//if there is no report in Vuex
   },
   methods:{
-    ...mapActions(["setReports","changeCurrentReport"]),
+    ...mapActions(["setReports","changeCurrentReport","setIsReportsUploaded"]),
     async fetchUserReports() {
       try {
         const token = localStorage.getItem("jwt"); 
