@@ -61,6 +61,7 @@ export default {
       this.uploadFile();
       return false; // Prevent automatic upload, will handle manually
     },
+    ...mapActions(["setIsReportsUploaded"]),
     async uploadFile(){
       if(!this.selectedFile){
         alert("Please select a file first!");
@@ -81,6 +82,7 @@ export default {
           });
           if(response.data.status==="ok"){
             alert("File uploaded and analyzed successfully!");
+            this.setIsReportsUploaded(true);
           }else{
             alert("Error during analysis: " + response.data.error);
           }

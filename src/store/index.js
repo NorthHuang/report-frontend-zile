@@ -210,10 +210,12 @@ const reportsModule = {
   state: () => ({
     reports: [], // report list
     currentReport: null,
+    isReportsUploaded:false,
   }),
   getters: {
     getReports: (state) => state.reports, // get reports
     getCurrentReport: (state) => state.currentReport,
+    isReportsUploaded: (state) => state.isReportsUploaded,
   },
   mutations: {
     setReports(state, reports) {
@@ -227,6 +229,9 @@ const reportsModule = {
     setCurrentReport(state, report) {
       state.currentReport = report; //change to current report
     },
+    setIsReportsUploaded(state, status) {
+      state.isReportsUploaded = status; 
+    },
   },
   actions: {
     setReports({ commit ,dispatch}, reports) {
@@ -237,6 +242,9 @@ const reportsModule = {
     },
     clearReports({ commit }) {
       commit("clearReports"); // clear reports mutation
+    },
+    setIsReportsUploaded({ commit }, status) {
+      commit("setIsReportsUploaded", status); // 更新上传状态
     },
   },
 };
