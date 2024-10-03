@@ -47,9 +47,11 @@ import { mapGetters } from "vuex";
 export default {
   name: "Chart",
   mounted() {
-    this.initChart1();
-    this.initChart2();
-    this.initChart3();
+    if(this.response && this.response && this.response.details){
+      this.initChart1();
+      this.initChart2();
+      this.initChart3();
+    }
   },
   computed: {
     ...mapGetters({
