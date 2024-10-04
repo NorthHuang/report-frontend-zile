@@ -51,12 +51,21 @@ const userModule = {
       commit("setUsername", username);
       dispatch("clearReports");// Clear reports when user logs in
       dispatch("clearResponse");
+      localStorage.setItem('username', username);
     },
     logout({ commit,dispatch }) {
       // Simulate a logout action, which clears the username
       commit("clearUsername");
       dispatch("clearReports"); // Clear reports when user logs out
       dispatch("clearResponse");
+      localStorage.removeItem('username'); 
+      localStorage.removeItem('jwt');
+    },
+    initializeAuthState({ commit }) {
+      const username = localStorage.getItem('username');  // get username from localStorage 
+      if (username) {
+        commit('setUsername', username);  //  
+      }
     },
   },
 };

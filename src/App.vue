@@ -7,6 +7,9 @@
 <script>
 export default {
   name: "App",
+  created() {
+    this.$store.dispatch('initializeAuthState');  // Restore User Status
+  },
 };
 </script>
 

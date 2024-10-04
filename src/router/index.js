@@ -25,7 +25,8 @@ const router = createRouter({
 // Add a global beforeEach guard
 router.beforeEach((to, from, next) => {
   const isAuthenticated = !!store.getters.getUsername; // Check if user is authenticated
-  if (to.matched.some((record) => record.meta.requiresAuth) && !isAuthenticated) {
+  const token = localStorage.getItem('jwt'); 
+  if (to.matched.some((record) => record.meta.requiresAuth) && (!isAuthenticated || !token)) {
     next("/"); // Redirect to login if not authenticated
   } else {
     next(); // Proceed to the route
