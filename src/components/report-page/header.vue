@@ -1,10 +1,17 @@
 <template>
   <div class="header">
     <div class="user-info">
-      <span @click="toggleDropdown">{{ username }} ▼</span>
+      <!-- <span @click="toggleDropdown">{{ username }} ▼</span>
       <div v-if="showDropdown" class="dropdown-menu">
         <button @click="handleLogout">Logout</button>
-      </div>
+      </div> -->
+      <div class="dropdown-container" @click="toggleDropdown">
+    <span>{{ username }}</span>
+    <i class="arrow-down"></i>
+    <div v-if="showDropdown" class="dropdown-menu">
+      <button @click="handleLogout" class="logout-button">Logout</button>
+    </div>
+  </div>
     </div>
     <!-- <Upload action="//jsonplaceholder.typicode.com/posts/">
       <Button size="large" icon="ios-cloud-upload-outline" @click="uploadFile"
@@ -110,5 +117,50 @@ export default {
   top: 10px; 
   left: 10px;
   cursor: pointer;
+}
+.dropdown-container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.arrow-down {
+  border: solid #555;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 4px;
+  margin-left: 8px;
+  transform: rotate(45deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 100;
+  width: 100px;
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.logout-button:hover {
+  background-color: #e53935;
 }
 </style>

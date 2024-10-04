@@ -98,11 +98,8 @@ const reportsModule = {
     },
   },
   actions: {
-    setReports({ commit ,dispatch}, reports) {
+    setReports({ commit }, reports) {
       commit("setReports", reports); // submit report to mutation
-      if (reports.length > 0) {
-        dispatch("changeCurrentReport", reports[0]); // 自动设置第一个报告为当前报告
-      }
     },
     clearReports({ commit }) {
       commit("clearReports"); // clear reports mutation
