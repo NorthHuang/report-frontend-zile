@@ -58,7 +58,7 @@ export default {
   watch: {
   response: {
     handler(newVal) {
-      if (newVal && newVal.details) {
+      if (newVal && newVal.details && Array.isArray(newVal.details)) {
         this.renderCharts();
       }
     },
