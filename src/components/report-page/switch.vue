@@ -1,8 +1,23 @@
+<!-- <template>
+  <div class="switch">
+    <div>Reports:</div>
+    <div v-for="(report, index) in getReports" :key="index" class="report-item">
+      <button 
+      :class="{ 'active': selectedReport === report }"
+      @click="generateChart(report)">Report {{ index + 1 }}</button>
+    </div>
+  </div>
+</template> -->
 <template>
   <div class="switch">
-    <p>Reports:</p>
-    <div v-for="(report, index) in getReports" :key="index" class="report-item">
-      <button @click="generateChart(report)">Report {{ index + 1 }}</button>
+    <div class="reports-title">Reports:</div>
+    <div class="reports-container">
+      <div v-for="(report, index) in getReports" :key="index" class="report-item">
+        <button 
+          :class="{ 'active': selectedReport === report }"
+          @click="generateChart(report)">Report {{ index + 1 }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -11,6 +26,11 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Switch",
+  data() {
+    return {
+      selectedReport: null, // 
+    };
+  },
   computed:{
     ...mapGetters({getReports:"getReports",
     isReportsUploaded: "isReportsUploaded",
@@ -40,6 +60,9 @@ export default {
         if (response.data.status === "success") {
             if(response.data.reports && response.data.reports.length > 0){
               this.setReports(response.data.reports)
+              const latestReport = response.data.reports[response.data.reports.length-1]; 
+              this.selectedReport = latestReport;//the newest report button should be selected
+              this.changeCurrentReport(latestReport)//load the newest report
             }
         } else {
           console.error("Failed to fetch reports:", response.data.error);
@@ -50,6 +73,7 @@ export default {
     },
     generateChart(report) {
       this.changeCurrentReport(report); 
+      this.selectedReport = report;
     },
   },
 };
@@ -68,12 +92,26 @@ export default {
   border-radius: 2em;
 }
 
+.reports-title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.reports-container {
+  width: 100%;
+  height: 90%;
+  overflow-y: auto; /* Scrollable when there are too many reports */
+}
 .report-item {
   margin: 10px 0;
+  display: flex;
+  justify-content: center;
 }
 
 button {
-  width: 100%;
+  width: 70%;
   padding: 10px;
   background-color: #4caf50;
   color: white;
@@ -84,5 +122,13 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+button.active {
+  background-color: #ff9800;
+  color: white;
+}
+
+button.active:hover {
+  background-color: #e68900;
 }
 </style>
