@@ -82,9 +82,9 @@ export default {
 <style scoped>
 .switch {
   position: fixed;
-  right: 20px;
-  top: 10px;
-  bottom: 10px;
+  right: 1%;
+  top: 1.5%;
+  bottom: 1.5%;
   width: 15%;
   border: 1px solid #ffd77a;
   background-color: #fff9e6;
