@@ -1,7 +1,6 @@
 <template>
   <div id="chart">
     <div
-    <div
       id="recommendation"
       class="children_chart"
       style="
@@ -34,14 +33,12 @@
     <div
       class="children_chart"
       style="width: 90%; height: 50%;"
-      style="width: 90%; height: 50%;"
     >
       <div id="traffic" style="width: 100%; height: 100%"></div>
       <div class="title">
         <Alert type="success">network traffic analysis</Alert>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
