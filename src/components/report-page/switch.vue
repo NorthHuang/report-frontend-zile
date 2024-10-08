@@ -59,6 +59,7 @@ export default {
         });
         if (response.data.status === "success") {
             if(response.data.reports && response.data.reports.length > 0){
+              console.log("reports:",response);
               this.setReports(response.data.reports)
               const latestReport = response.data.reports[response.data.reports.length-1]; 
               this.selectedReport = latestReport;//the newest report button should be selected
