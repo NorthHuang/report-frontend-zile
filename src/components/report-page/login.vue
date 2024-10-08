@@ -1,5 +1,7 @@
 <template>
   <div class="login-container">
+    <h1 style="position: absolute; top: 10%;">Network data analysis and prediction system</h1>
+    <h2 style="position: absolute; top: 18%;">(Based on <span style="color: brown;">multiple</span> <span style="color: blueviolet;">hybrid</span> models)</h2>
     <div class="login-box">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
@@ -46,7 +48,7 @@ export default {
         if (token) {
           this.login(this.username); // Store the username in Vuex state
           localStorage.setItem('jwt', token); // Save JWT token in localStorage
-          this.$router.push("/main"); // Redirect to the main page
+          this.$router.push("/report"); // Redirect to the main page
         }
       } catch (error) {
         alert("Login failed. Please check your credentials.");

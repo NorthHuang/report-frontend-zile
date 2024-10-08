@@ -1,6 +1,6 @@
 <template>
   <div id="chart">
-    <!-- <div
+    <div
       id="recommendation"
       class="children_chart"
       style="
@@ -9,11 +9,17 @@
         border-radius: 2em;
       "
     >
-      <div style="padding: 3% 5%">
-        <h3 style="text-align: center">recommendations</h3>
-        <div>{{ response.recommendations.join() }}</div>
+        <div style="padding: 3% 5%; box-sizing: border-box;">
+            <h3 style="text-align: center">recommendations</h3>
+            <div>{{ recommendation }}</div>
+        </div>
+    </div>
+    <div class="children_chart" style="width: 90%; height: 50%; margin-bottom: 100px">
+      <div id="score" style="width: 100%; height: 100%"></div>
+      <div class="title">
+        <Alert type="success">risk score analysis</Alert>
       </div>
-    </div> -->
+    </div>
     <div
       class="children_chart"
       style="width: 90%; height: 50%; margin-bottom: 100px"
@@ -25,17 +31,11 @@
     </div>
     <div
       class="children_chart"
-      style="width: 90%; height: 50%; margin-bottom: 100px"
+      style="width: 90%; height: 50%;"
     >
       <div id="traffic" style="width: 100%; height: 100%"></div>
       <div class="title">
         <Alert type="success">network traffic analysis</Alert>
-      </div>
-    </div>
-    <div class="children_chart" style="width: 90%; height: 50%">
-      <div id="score" style="width: 100%; height: 100%"></div>
-      <div class="title">
-        <Alert type="success">risk score analysis</Alert>
       </div>
     </div>
   </div>
@@ -52,6 +52,7 @@ export default {
       chart1: null,  //chart instance
       chart2: null,
       chart3: null,
+      recommendation: "",
     };
   },
   mounted() {},
@@ -59,7 +60,9 @@ export default {
   response: {
     handler(newVal) {
       if (newVal && newVal.details && Array.isArray(newVal.details)) {
+        console.log("this.response.details:",this.response.details);
         this.renderCharts();
+        //get recommendation from vuex
       }
     },
     deep: true,  // 启用深度监听
@@ -72,6 +75,9 @@ export default {
   },
   methods: {
     renderCharts() {
+      this.recommendation = this.response.details[0].recommendation || "No recommendation available";
+      console.log("this.recommendation",this.recommendation);
+
       this.initChart1();
       this.initChart2();
       this.initChart3();

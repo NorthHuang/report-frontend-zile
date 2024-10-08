@@ -59,6 +59,7 @@ export default {
         });
         if (response.data.status === "success") {
             if(response.data.reports && response.data.reports.length > 0){
+              console.log("reports:",response);
               this.setReports(response.data.reports)
               const latestReport = response.data.reports[response.data.reports.length-1]; 
               this.selectedReport = latestReport;//the newest report button should be selected
@@ -82,9 +83,9 @@ export default {
 <style scoped>
 .switch {
   position: fixed;
-  right: 20px;
-  top: 10px;
-  bottom: 10px;
+  right: 1%;
+  top: 1.5%;
+  bottom: 1.5%;
   width: 15%;
   border: 1px solid #ffd77a;
   background-color: #fff9e6;
