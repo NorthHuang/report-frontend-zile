@@ -20,7 +20,6 @@
         <Alert type="success">risk score analysis</Alert>
       </div>
     </div>
-    </div>
     <div
       class="children_chart"
       style="width: 90%; height: 50%; margin-bottom: 100px"
@@ -39,7 +38,9 @@
         <Alert type="success">network traffic analysis</Alert>
       </div>
     </div>
+  </div>
 </template>
+
 
 <script>
 import * as echarts from "echarts";
