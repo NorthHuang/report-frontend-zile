@@ -5,7 +5,7 @@
         "packet_rate": [545],
         "data_rate": [411042],
         "is_encrypted": [false],
-        "destination_device": ["macOS"],
+        "destination_device": ["Windows server"],
         "cpu_usage": [47.03],
         "memory_usage": [44.74],
         "disk_usage": [64.8],

@@ -1,27 +1,30 @@
 <template>
-    <div class="main">
-        <div>
-        fuck, holy fuck, what the fuck
-    </div>
-    <div>
-        fuck, holy fuck, why need these rubbish components
-    </div>
-    <div>
-        fuck, holy fuck, to make the page looks like a piece of shit
-    </div>
-    <div>
-        fuck, holy fuck, someones even don't know frontend beauty and IT tech at all!!!
-    </div>
-    </div>
+  <div class="main">
+    <h2 class="header">Additional description of risk score</h2>
+    <h3 class="txt">We use <span style="color: red">hybrid machine learning model</span> to analyzes the parameters uploaded by the user to derive the risk score</h3>
+    <h3 class="txt">The <span style="color: red">higher</span> the score, the <span style="color: red">higher</span> the risk</h3>
+    <h3 class="txt">Each piece of data has a corresponding threat level, which may be <span style="color: red;">Security, DDOS attack, Phishing</span>, etc.</h3>
+    <h3 class="txt">
+      Click the button below to view detailed correspondence
+    </h3>
+    <Poptip placement="right">
+        <Button>Click</Button>
+        <template #content>
+            <div class="api">
+              <img src="../../assets/relation.png" alt="">
+            </div>
+        </template>
+    </Poptip>
+  </div>
 </template>
 
 <script>
 export default {
   name: "RiskScoreDescribe",
   data() {
-    return {}
-  }
-}
+    return {};
+  },
+};
 </script>
 <style scoped>
 .main {
@@ -37,5 +40,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
+}
+.header{
+  text-align: center;
+  color: brown;
+}
+.txt{
+  text-align: center;
+  color: rgb(73, 43, 226);
 }
 </style>

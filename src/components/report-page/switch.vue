@@ -12,10 +12,16 @@
   <div class="switch">
     <div class="reports-title">Reports:</div>
     <div class="reports-container">
-      <div v-for="(report, index) in getReports" :key="index" class="report-item">
-        <button 
-          :class="{ 'active': selectedReport === report }"
-          @click="generateChart(report)">Report {{ index + 1 }}
+      <div
+        v-for="(report, index) in getReports"
+        :key="index"
+        class="report-item"
+      >
+        <button
+          :class="{ active: selectedReport === report }"
+          @click="generateChart(report)"
+        >
+          Report {{ index + 1 }}
         </button>
       </div>
     </div>
@@ -28,15 +34,16 @@ export default {
   name: "Switch",
   data() {
     return {
-      selectedReport: null, // 
+      selectedReport: null, //
     };
   },
-  computed:{
-    ...mapGetters({getReports:"getReports",
-    isReportsUploaded: "isReportsUploaded",
+  computed: {
+    ...mapGetters({
+      getReports: "getReports",
+      isReportsUploaded: "isReportsUploaded",
     }), //get reports from Vuex
   },
-  watch:{
+  watch: {
     isReportsUploaded(newVal) {
       if (newVal) {
         this.fetchUserReports(); // Fetch new reports when upload completes
@@ -45,26 +52,31 @@ export default {
     },
   },
   async created() {
-    await this.fetchUserReports();//if there is no report in Vuex
+    await this.fetchUserReports(); //if there is no report in Vuex
   },
-  methods:{
-    ...mapActions(["setReports","changeCurrentReport","setIsReportsUploaded"]),
+  methods: {
+    ...mapActions([
+      "setReports",
+      "changeCurrentReport",
+      "setIsReportsUploaded",
+    ]),
     async fetchUserReports() {
       try {
-        const token = localStorage.getItem("jwt"); 
+        const token = localStorage.getItem("jwt");
         const response = await this.$axios.get("/user-reports", {
           headers: {
             "x-access-token": token,
           },
         });
         if (response.data.status === "success") {
-            if(response.data.reports && response.data.reports.length > 0){
-              console.log("reports:",response);
-              this.setReports(response.data.reports)
-              const latestReport = response.data.reports[response.data.reports.length-1]; 
-              this.selectedReport = latestReport;//the newest report button should be selected
-              this.changeCurrentReport(latestReport)//load the newest report
-            }
+          if (response.data.reports && response.data.reports.length > 0) {
+            console.log("reports:", response);
+            this.setReports(response.data.reports);
+            const latestReport =
+              response.data.reports[response.data.reports.length - 1];
+            this.selectedReport = latestReport; //the newest report button should be selected
+            this.changeCurrentReport(latestReport); //load the newest report
+          }
         } else {
           console.error("Failed to fetch reports:", response.data.error);
         }
@@ -73,7 +85,7 @@ export default {
       }
     },
     generateChart(report) {
-      this.changeCurrentReport(report); 
+      this.changeCurrentReport(report);
       this.selectedReport = report;
     },
   },

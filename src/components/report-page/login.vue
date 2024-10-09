@@ -1,7 +1,12 @@
 <template>
   <div class="login-container">
-    <h1 style="position: absolute; top: 10%;">Network data analysis and prediction system</h1>
-    <h2 style="position: absolute; top: 18%;">(Based on <span style="color: brown;">multiple</span> <span style="color: blueviolet;">hybrid</span> models)</h2>
+    <h1 style="position: absolute; top: 10%">
+      Network data analysis and prediction system
+    </h1>
+    <h2 style="position: absolute; top: 18%">
+      (Based on <span style="color: brown">multiple</span>
+      <span style="color: blueviolet">hybrid</span> models)
+    </h2>
     <div class="login-box">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
@@ -11,10 +16,17 @@
         </div>
         <div class="form-group">
           <label for="password">Password:</label>
-          <input type="password" v-model="password" class="form-control" required />
+          <input
+            type="password"
+            v-model="password"
+            class="form-control"
+            required
+          />
         </div>
         <div class="button-group">
-          <button type="button" class="register-button" @click="goToRegister">register</button>
+          <button type="button" class="register-button" @click="goToRegister">
+            register
+          </button>
           <button type="submit" class="login-button">Sign in</button>
         </div>
       </form>
@@ -38,7 +50,7 @@ export default {
     async handleLogin() {
       try {
         // Send login request to the backend
-        const response = await this.$axios.post('/login', {
+        const response = await this.$axios.post("/login", {
           username: this.username,
           password: this.password,
         });
@@ -47,7 +59,7 @@ export default {
         // If login is successful
         if (token) {
           this.login(this.username); // Store the username in Vuex state
-          localStorage.setItem('jwt', token); // Save JWT token in localStorage
+          localStorage.setItem("jwt", token); // Save JWT token in localStorage
           this.$router.push("/report"); // Redirect to the main page
         }
       } catch (error) {
@@ -57,7 +69,7 @@ export default {
     async goToRegister() {
       try {
         // Send registration request to the backend
-        const response = await this.$axios.post('/register', {
+        const response = await this.$axios.post("/register", {
           username: this.username,
           password: this.password,
         });
@@ -70,10 +82,10 @@ export default {
       } catch (error) {
         // alert("Error occurred during registration.");
         if (error.response && error.response.data.message) {
-      alert(`Error: ${error.response.data.message}`);
-    } else {
-      alert('An unknown error occurred during registration.');
-    }
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert("An unknown error occurred during registration.");
+        }
       }
     },
   },
@@ -127,7 +139,8 @@ h2 {
   justify-content: space-between;
 }
 
-.login-button, .register-button {
+.login-button,
+.register-button {
   background-color: #4caf50;
   color: white;
   padding: 10px 10px;
@@ -137,7 +150,8 @@ h2 {
   width: 48%;
 }
 
-.login-button:hover, .register-button:hover {
+.login-button:hover,
+.register-button:hover {
   background-color: #45a049;
 }
 </style>

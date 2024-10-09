@@ -6,12 +6,12 @@
         <button @click="handleLogout">Logout</button>
       </div> -->
       <div class="dropdown-container" @click="toggleDropdown">
-    <span>{{ username }}</span>
-    <i class="arrow-down"></i>
-    <div v-if="showDropdown" class="dropdown-menu">
-      <button @click="handleLogout" class="logout-button">Logout</button>
-    </div>
-  </div>
+        <span>{{ username }}</span>
+        <i class="arrow-down"></i>
+        <div v-if="showDropdown" class="dropdown-menu">
+          <button @click="handleLogout" class="logout-button">Logout</button>
+        </div>
+      </div>
     </div>
     <!-- <Upload action="//jsonplaceholder.typicode.com/posts/">
       <Button size="large" icon="ios-cloud-upload-outline" @click="uploadFile"
@@ -19,7 +19,9 @@
       >
     </Upload> -->
     <Upload :before-upload="handleFileUpload" :show-upload-list="false">
-      <Button size="large" icon="ios-cloud-upload-outline">Upload And Analyse</Button>
+      <Button size="large" icon="ios-cloud-upload-outline"
+        >Upload And Analyse</Button
+      >
     </Upload>
     <Button
       size="large"
@@ -38,7 +40,7 @@ export default {
   data() {
     return {
       showDropdown: false,
-      selectedFile: null,//store the uploaded file
+      selectedFile: null, //store the uploaded file
     };
   },
   computed: {
@@ -49,11 +51,11 @@ export default {
   methods: {
     ...mapActions(["logout"]),
     toggleDropdown() {
-      this.showDropdown = !this.showDropdown; 
+      this.showDropdown = !this.showDropdown;
     },
     handleLogout() {
-      this.logout(); 
-      this.$router.push("/"); 
+      this.logout();
+      this.$router.push("/");
     },
     downloadJson() {
       const filePath = "/example.json";
@@ -62,41 +64,41 @@ export default {
       link.download = "data.json";
       link.click();
     },
-    handleFileUpload(file){
+    handleFileUpload(file) {
       this.selectedFile = file; // Capture the uploaded file
       this.uploadFile();
       return false; // Prevent automatic upload, will handle manually
     },
     ...mapActions(["setIsReportsUploaded"]),
-    async uploadFile(){
-      if(!this.selectedFile){
+    async uploadFile() {
+      if (!this.selectedFile) {
         alert("Please select a file first!");
         return;
       }
-      try{
-          //create a form data object
-          let formData = new FormData();
-          formData.append("file", this.selectedFile);
-          //add jwt token 
-          const token =localStorage.getItem("jwt");
-          //send it to back end
-          const response=await this.$axios.post("/analysis", formData,{
-            headers: {
+      try {
+        //create a form data object
+        let formData = new FormData();
+        formData.append("file", this.selectedFile);
+        //add jwt token
+        const token = localStorage.getItem("jwt");
+        //send it to back end
+        const response = await this.$axios.post("/analysis", formData, {
+          headers: {
             "Content-Type": "multipart/form-data",
             "x-access-token": token, // Send JWT token
           },
-          });
-          if(response.data.status==="ok"){
-            alert("File uploaded and analyzed successfully!");
-            this.setIsReportsUploaded(true);
-          }else{
-            alert("Error during analysis: " + response.data.error);
-          }
-      } catch (error){
+        });
+        if (response.data.status === "ok") {
+          alert("File uploaded and analyzed successfully!");
+          this.setIsReportsUploaded(true);
+        } else {
+          alert("Error during analysis: " + response.data.error);
+        }
+      } catch (error) {
         console.error("Error during file upload:", error);
         alert("Error during file upload and analysis.");
       }
-    } 
+    },
   },
 };
 </script>
@@ -113,8 +115,8 @@ export default {
   border-radius: 2em;
 }
 .user-info {
-  position: absolute; 
-  top: 10px; 
+  position: absolute;
+  top: 10px;
   left: 10px;
   cursor: pointer;
 }
