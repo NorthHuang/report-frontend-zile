@@ -20,6 +20,9 @@ const responseModule = {
     clearResponse(state) {
       state.response.details = defaultResponse; // 清空当前 response
     },
+    getResponse(state){
+      return state.response.details
+    }
   },
   actions: {
     changeCurrentReport({ commit }, report) {
@@ -28,6 +31,9 @@ const responseModule = {
     clearResponse({ commit }) {
       commit("clearResponse"); // 清空 response
     },
+    getCurrentReport({commit},report){
+      commit("getResponse", report)
+    }
   },
 };
 const userModule = {
@@ -75,11 +81,13 @@ const reportsModule = {
     reports: [], // report list
     currentReport: null,
     isReportsUploaded:false,
+    mostProminent:null,
   }),
   getters: {
     getReports: (state) => state.reports, // get reports
     getCurrentReport: (state) => state.currentReport,
     isReportsUploaded: (state) => state.isReportsUploaded,
+    mostProminent:(state)=>state.mostProminent
   },
   mutations: {
     setReports(state, reports) {
@@ -90,12 +98,12 @@ const reportsModule = {
       state.reports = []; // clear reports when user logs out or switches user
       state.currentReport = null;
     },
-    setCurrentReport(state, report) {
-      state.currentReport = report; //change to current report
-    },
     setIsReportsUploaded(state, status) {
       state.isReportsUploaded = status; 
     },
+    setMostProminent(state,mostProminent){
+      state.mostProminent=mostProminent
+    }
   },
   actions: {
     setReports({ commit }, reports) {
@@ -106,6 +114,9 @@ const reportsModule = {
     },
     setIsReportsUploaded({ commit }, status) {
       commit("setIsReportsUploaded", status); // 更新上传状态
+    },
+    setMostProminent({ commit }, mostProminent) {
+      commit("setMostProminent", mostProminent); // 
     },
   },
 };

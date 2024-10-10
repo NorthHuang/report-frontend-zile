@@ -43,7 +43,7 @@
 
 <script>
 import * as echarts from "echarts";
-import { mapGetters } from "vuex";
+import { mapGetters,mapActions } from "vuex";
 import { markRaw } from "vue";
 export default {
   name: "Chart",
@@ -55,7 +55,6 @@ export default {
       recommendation: "",
     };
   },
-  mounted() {},
   watch: {
     response: {
       handler(newVal) {
@@ -72,17 +71,47 @@ export default {
     ...mapGetters({
       response: "getResponse",
     }),
+   
   },
   methods: {
+    ...mapActions([
+      "setMostProminent",
+    ]),
     renderCharts() {
       this.recommendation =
         this.response.details[0].recommendation ||
         "No recommendation available";
       console.log("this.recommendation", this.recommendation);
-
+      this.getMostProminentData();
       this.initChart1();
       this.initChart2();
       this.initChart3();
+    },
+    getMostProminentData(){
+      if (!this.response.details) return ;
+      const mostProminent = {
+        highestCpuUsage: null,
+        highestMemoryUsage: null,
+        highestRiskScore: null,
+        highestDiskUsage:null
+      };
+      const report=this.response.details
+    report.forEach((item) => {  
+    if (mostProminent.highestCpuUsage === null || item.cpu_usage[0] > mostProminent.highestCpuUsage) {
+      mostProminent.highestCpuUsage = item.cpu_usage[0];
+    }
+    if (mostProminent.highestMemoryUsage === null || item.memory_usage[0] > mostProminent.highestMemoryUsage) {
+      mostProminent.highestMemoryUsage = item.memory_usage[0];
+    }
+    if (mostProminent.highestDiskUsage === null || item.disk_usage[0] > mostProminent.highestDiskUsage) {
+      mostProminent.highestDiskUsage = item.disk_usage[0];
+    }
+    if (mostProminent.highestRiskScore === null || item.risk_score > mostProminent.highestRiskScore) {
+      mostProminent.highestRiskScore = item.risk_score;
+    }
+});
+console.log("mostProminent",mostProminent);
+    this.setMostProminent(mostProminent)
     },
     initChart1() {
       if (this.chart1) {
