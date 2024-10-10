@@ -1,9 +1,15 @@
 <template>
   <div class="main">
-    <h2 class="header">Additional description of risk score</h2>
+    <!-- <h2 class="header">Additional description of risk score</h2>
     <h3 class="txt">We use <span style="color: red">hybrid machine learning model</span> to analyzes the parameters uploaded by the user to derive the risk score</h3>
     <h3 class="txt">The <span style="color: red">higher</span> the score, the <span style="color: red">higher</span> the risk</h3>
-    <h3 class="txt">Each piece of data has a corresponding threat level, which may be <span style="color: red;">Security, DDOS attack, Phishing</span>, etc.</h3>
+    <h3 class="txt">Each piece of data has a corresponding threat level, which may be <span style="color: red;">Security, DDOS attack, Phishing</span>, etc.</h3> -->
+    <h3 class="header">Most Prominent Data:</h3>
+    <p class="txt">Highest CPU Usage: <br>{{ mostProminent?.highestCpuUsage }}</p>
+    <p class="txt">Highest Memory Usage: <br>{{ mostProminent?.highestMemoryUsage }}</p>
+    <p class="txt">Highest Disk Usage: <br>{{ mostProminent?.highestDiskUsage }}</p>
+    <p class="txt">Highest Risk Score: <br>{{ mostProminent?.highestRiskScore }}</p>
+    <!-- <Table :columns="columns" :data="tableData"></Table> -->
     <h3 class="txt">
       Click the button below to view detailed correspondence
     </h3>
@@ -19,10 +25,11 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "RiskScoreDescribe",
-  data() {
-    return {};
+  computed: {
+    ...mapGetters(["mostProminent"]),
   },
 };
 </script>
@@ -49,5 +56,6 @@ export default {
 .txt{
   text-align: center;
   color: rgb(73, 43, 226);
+  font-size: 17px;
 }
 </style>
